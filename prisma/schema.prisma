@@ -35,12 +35,12 @@ enum ContentPlatform {
   INSTAGRAM
 }
 
-model User {
-  id        String        @id @db.Uuid
-  email     String        @unique
-  name      String?
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+model Profile {
+  id        String   @id @db.Uuid
+  email     String   @unique
+  fullName  String?  @map("full_name")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   customers    Customer[]
   products     Product[]
@@ -48,66 +48,72 @@ model User {
   contentPosts ContentPost[]
   reminders    Reminder[]
   activityLogs ActivityLog[]
+
+  @@map("profiles")
 }
 
 model Customer {
   id            String         @id @default(uuid()) @db.Uuid
-  userId        String         @db.Uuid
+  userId        String         @db.Uuid @map("user_id")
   name          String
   phone         String?
   address       String?
-  favoriteScent String?
-  socialLink    String?
+  favoriteScent String?        @map("favorite_scent")
+  socialLink    String?        @map("social_link")
   notes         String?
   status        CustomerStatus @default(ACTIVE)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
 
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
   orders    Order[]
   reminders Reminder[]
 
   @@index([userId])
   @@index([name])
   @@index([phone])
+
+  @@map("customers")
 }
 
 model Product {
-  id                String     @id @default(uuid()) @db.Uuid
-  userId            String     @db.Uuid
+  id                String   @id @default(uuid()) @db.Uuid
+  userId            String   @db.Uuid @map("user_id")
   name              String
   brand             String?
-  volumeMl          Int?
-  costPrice         Decimal    @db.Decimal(10, 2)
-  sellPrice         Decimal    @db.Decimal(10, 2)
+  volumeMl          Int?     @map("volume_ml")
+  costPrice         Decimal  @db.Decimal(10, 2) @map("cost_price")
+  sellPrice         Decimal  @db.Decimal(10, 2) @map("sell_price")
   stock             Int
-  lowStockThreshold Int        @default(5)
+  lowStockThreshold Int      @default(5) @map("low_stock_threshold")
   description       String?
-  imageUrl          String?
-  createdAt         DateTime   @default(now())
-  updatedAt         DateTime   @updatedAt
+  imageUrl          String?  @map("image_url")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
 
-  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user       Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
   orderItems OrderItem[]
 
   @@index([userId])
   @@index([name])
+
+  @@map("products")
 }
 
 model Order {
-  id          String      @id @default(uuid()) @db.Uuid
-  userId      String      @db.Uuid
-  customerId  String?     @db.Uuid
-  status      OrderStatus @default(PENDING)
-  subtotal    Decimal     @db.Decimal(10, 2)
-  total       Decimal     @db.Decimal(10, 2)
-  profit      Decimal     @db.Decimal(10, 2)
-  currency    String      @default("USD")
-  notes       String?
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id         String      @id @default(uuid()) @db.Uuid
+  userId     String      @db.Uuid @map("user_id")
+  customerId String?     @db.Uuid @map("customer_id")
+  status     OrderStatus @default(PENDING)
+  subtotal   Decimal     @db.Decimal(10, 2)
+  total      Decimal     @db.Decimal(10, 2)
+  profit     Decimal     @db.Decimal(10, 2)
+  currency   String      @default("USD")
+  notes      String?
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
   customer Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
   items    OrderItem[]
 
@@ -115,76 +121,85 @@ model Order {
   @@index([customerId])
   @@index([status])
   @@index([createdAt])
+
+  @@map("orders")
 }
 
 model OrderItem {
   id        String   @id @default(uuid()) @db.Uuid
-  orderId   String   @db.Uuid
-  productId String?  @db.Uuid
+  orderId   String   @db.Uuid @map("order_id")
+  productId String?  @db.Uuid @map("product_id")
   quantity  Int
-  unitCost  Decimal  @db.Decimal(10, 2)
-  unitPrice Decimal  @db.Decimal(10, 2)
-  createdAt DateTime @default(now())
+  unitCost  Decimal  @db.Decimal(10, 2) @map("unit_cost")
+  unitPrice Decimal  @db.Decimal(10, 2) @map("unit_price")
+  createdAt DateTime @default(now()) @map("created_at")
 
   order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 
   @@index([orderId])
   @@index([productId])
+
+  @@map("order_items")
 }
 
 model ContentPost {
-  id          String         @id @default(uuid()) @db.Uuid
-  userId      String         @db.Uuid
+  id          String          @id @default(uuid()) @db.Uuid
+  userId      String          @db.Uuid @map("user_id")
   platform    ContentPlatform
-  status      ContentStatus  @default(IDEA)
+  status      ContentStatus   @default(IDEA)
   title       String
   idea        String?
   caption     String?
-  scheduledAt DateTime?
-  postedAt    DateTime?
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  scheduledAt DateTime?       @map("scheduled_at")
+  postedAt    DateTime?       @map("posted_at")
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([status])
   @@index([platform])
   @@index([scheduledAt])
+
+  @@map("content_posts")
 }
 
 model Reminder {
   id          String    @id @default(uuid()) @db.Uuid
-  userId      String    @db.Uuid
-  customerId  String    @db.Uuid
-  dueAt       DateTime
-  completedAt DateTime?
+  userId      String    @db.Uuid @map("user_id")
+  customerId  String    @db.Uuid @map("customer_id")
+  dueAt       DateTime  @map("due_at")
+  completedAt DateTime? @map("completed_at")
   note        String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
 
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user     Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
   customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([customerId])
   @@index([dueAt])
+
+  @@map("reminders")
 }
 
 model ActivityLog {
   id         String   @id @default(uuid()) @db.Uuid
-  userId     String   @db.Uuid
+  userId     String   @db.Uuid @map("user_id")
   action     String
-  entityType String
-  entityId   String?
+  entityType String   @map("entity_type")
+  entityId   String?  @map("entity_id")
   metadata   Json?
-  createdAt  DateTime @default(now())
+  createdAt  DateTime @default(now()) @map("created_at")
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([createdAt])
   @@index([entityType])
-}
 
+  @@map("activity_logs")
+}
