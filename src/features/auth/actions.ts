@@ -16,6 +16,25 @@ export async function signInAction(input: { email: string; password: string; nex
   redirect(input.next ?? "/dashboard");
 }
 
+export async function signInWithGoogleAction(input: { next?: string }) {
+  const supabase = await createSupabaseServerClient();
+  if (!supabase) return { ok: false as const, message: "Missing Supabase env. Visit /setup." };
+
+  const origin = (await headers()).get("origin") ?? "";
+  const next = input.next ?? "/dashboard";
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${origin}/auth/callback?next=${encodeURIComponent(next)}`,
+    },
+  });
+
+  if (error) return { ok: false as const, message: error.message };
+  if (!data?.url) return { ok: false as const, message: "Missing OAuth URL." };
+  redirect(data.url);
+}
+
 export async function signUpAction(input: { email: string; password: string }) {
   const supabase = await createSupabaseServerClient();
   if (!supabase) return { ok: false as const, message: "Missing Supabase env. Visit /setup." };
