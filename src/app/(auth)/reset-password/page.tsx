@@ -7,12 +7,12 @@ export default function ResetPasswordPage() {
   return (
     <div className="mx-auto flex min-h-screen max-w-screen-sm items-center px-6 py-12">
       <AuthCard
-        title="Set a new password"
-        subtitle="Choose a strong password for your admin account."
+        title="Tạo mật khẩu mới"
+        subtitle="Chọn mật khẩu mạnh cho tài khoản quản trị."
         footer={
           <div className="text-center">
             <Link className="text-muted-foreground hover:text-foreground" href="/login">
-              Back to sign in
+              Quay lại đăng nhập
             </Link>
           </div>
         }

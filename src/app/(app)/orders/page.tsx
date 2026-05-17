@@ -15,10 +15,10 @@ export default async function OrdersPage() {
     id: o.id,
     createdAt: o.createdAt.toISOString(),
     status: o.status,
-    customer: o.customer?.name ?? "Walk-in",
+    customer: o.customer?.name ?? "Khách lẻ",
     items: (() => {
       const names = o.items
-        .map((i) => i.product?.name)
+        .map((i) => i.product?.name ?? i.productName)
         .filter((v): v is string => Boolean(v));
       if (names.length === 0) return "—";
       const head = names.slice(0, 2).join(", ");
@@ -39,17 +39,17 @@ export default async function OrdersPage() {
   const products = productsRaw.map((p: ProductRow) => ({
     id: p.id,
     label: p.name,
-    meta: `stock ${p.stock}`,
+    meta: `tồn kho ${p.stock}`,
   }));
 
   return (
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="font-serif text-4xl font-semibold tracking-tight">
-          Order Management
+          Quản lý đơn hàng
         </h1>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          Review and manage incoming boutique and wholesale orders. Ensure timely dispatch to maintain the atelier’s standards.
+          Xem và xử lý các đơn hàng. Đảm bảo đóng gói và giao hàng đúng hạn.
         </p>
       </div>
 

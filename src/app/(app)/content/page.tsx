@@ -19,10 +19,10 @@ export default async function ContentPage() {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="font-serif text-4xl font-semibold tracking-tight">
-          Content Planner
+          Kế hoạch nội dung
         </h1>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          Organize and track your visual narratives across TikTok and Instagram.
+          Tổ chức và theo dõi nội dung trên TikTok, Instagram và YouTube Shorts.
         </p>
       </div>
 

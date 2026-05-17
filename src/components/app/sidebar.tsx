@@ -18,7 +18,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
             L’Atelier
           </div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-            Perfume CRM
+            CRM Nước hoa
           </div>
         </div>
       </div>
@@ -56,10 +56,10 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
 
       <div className="mt-auto rounded-lg border bg-card/50 p-4">
         <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-          Atelier Notes
+          Ghi chú
         </div>
         <div className="mt-2 text-sm text-foreground/90">
-          Keep inventory lean. Track VIP clients. Ship within 24h.
+          Giữ tồn kho gọn. Theo dõi VIP. Giao trong 24h.
         </div>
       </div>
     </div>

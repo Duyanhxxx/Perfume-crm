@@ -5,12 +5,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-}
-
-enum CustomerStatus {
-  ACTIVE
-  INACTIVE
-  VIP
+  relationMode = "prisma"
 }
 
 enum OrderStatus {
@@ -20,6 +15,8 @@ enum OrderStatus {
   COMPLETED
   RETURNED
   CANCELLED
+
+  @@map("order_status")
 }
 
 enum ContentStatus {
@@ -28,19 +25,25 @@ enum ContentStatus {
   FILMING
   EDITING
   POSTED
+
+  @@map("content_status")
 }
 
 enum ContentPlatform {
   TIKTOK
   INSTAGRAM
+  YOUTUBE_SHORTS
+
+  @@map("content_platform")
 }
 
 model Profile {
   id        String   @id @db.Uuid
-  email     String   @unique
+  email     String?  @db.Citext
   fullName  String?  @map("full_name")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  avatarUrl String?  @map("avatar_url")
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
   customers    Customer[]
   products     Product[]
@@ -53,22 +56,27 @@ model Profile {
 }
 
 model Customer {
-  id            String         @id @default(uuid()) @db.Uuid
-  userId        String         @db.Uuid @map("user_id")
-  name          String
-  phone         String?
-  address       String?
-  favoriteScent String?        @map("favorite_scent")
-  socialLink    String?        @map("social_link")
-  notes         String?
-  status        CustomerStatus @default(ACTIVE)
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String   @db.Uuid @map("owner_id")
+  name             String
+  email            String?  @db.Citext
+  phone            String?
+  address          String?
+  city             String?
+  country          String?
+  socialLink       String?  @map("social_link")
+  favoriteScent    String?  @map("favorite_scent")
+  notes            String?
+  status           String   @default("ACTIVE")
+  lastEngagementAt DateTime? @map("last_engagement_at") @db.Timestamptz
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt        DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
   user      Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
   orders    Order[]
   reminders Reminder[]
 
+  @@unique([id, userId])
   @@index([userId])
   @@index([name])
   @@index([phone])
@@ -77,23 +85,25 @@ model Customer {
 }
 
 model Product {
-  id                String   @id @default(uuid()) @db.Uuid
-  userId            String   @db.Uuid @map("user_id")
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String   @db.Uuid @map("owner_id")
   name              String
   brand             String?
   volumeMl          Int?     @map("volume_ml")
-  costPrice         Decimal  @db.Decimal(10, 2) @map("cost_price")
-  sellPrice         Decimal  @db.Decimal(10, 2) @map("sell_price")
-  stock             Int
+  costPrice         Decimal  @db.Decimal(12, 2) @map("cost_price")
+  sellPrice         Decimal  @db.Decimal(12, 2) @map("sell_price")
+  currency          String   @default("VND")
+  stock             Int      @map("stock_on_hand")
   lowStockThreshold Int      @default(5) @map("low_stock_threshold")
   description       String?
   imageUrl          String?  @map("image_url")
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt         DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
   user       Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
   orderItems OrderItem[]
 
+  @@unique([id, userId])
   @@index([userId])
   @@index([name])
 
@@ -101,22 +111,28 @@ model Product {
 }
 
 model Order {
-  id         String      @id @default(uuid()) @db.Uuid
-  userId     String      @db.Uuid @map("user_id")
-  customerId String?     @db.Uuid @map("customer_id")
-  status     OrderStatus @default(PENDING)
-  subtotal   Decimal     @db.Decimal(10, 2)
-  total      Decimal     @db.Decimal(10, 2)
-  profit     Decimal     @db.Decimal(10, 2)
-  currency   String      @default("USD")
-  notes      String?
-  createdAt  DateTime    @default(now()) @map("created_at")
-  updatedAt  DateTime    @updatedAt @map("updated_at")
+  id          String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String      @db.Uuid @map("owner_id")
+  customerId  String?     @db.Uuid @map("customer_id")
+  status      OrderStatus @default(PENDING)
+  currency    String      @default("VND")
+  subtotal    Decimal     @db.Decimal(12, 2)
+  shippingFee Decimal     @db.Decimal(12, 2) @map("shipping_fee")
+  total       Decimal     @db.Decimal(12, 2)
+  cost        Decimal     @db.Decimal(12, 2)
+  profit      Decimal     @db.Decimal(12, 2)
+  notes       String?
+  orderedAt   DateTime    @default(now()) @map("ordered_at") @db.Timestamptz
+  completedAt DateTime?   @map("completed_at") @db.Timestamptz
+  createdAt   DateTime    @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime    @updatedAt @map("updated_at") @db.Timestamptz
 
   user     Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  customer Customer? @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  customer Customer? @relation(fields: [customerId, userId], references: [id, userId])
   items    OrderItem[]
+  reminders Reminder[]
 
+  @@unique([id, userId])
   @@index([userId])
   @@index([customerId])
   @@index([status])
@@ -126,17 +142,21 @@ model Order {
 }
 
 model OrderItem {
-  id        String   @id @default(uuid()) @db.Uuid
-  orderId   String   @db.Uuid @map("order_id")
-  productId String?  @db.Uuid @map("product_id")
-  quantity  Int
-  unitCost  Decimal  @db.Decimal(10, 2) @map("unit_cost")
-  unitPrice Decimal  @db.Decimal(10, 2) @map("unit_price")
-  createdAt DateTime @default(now()) @map("created_at")
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @db.Uuid @map("owner_id")
+  orderId     String   @db.Uuid @map("order_id")
+  productId   String?  @db.Uuid @map("product_id")
+  productName String   @map("product_name")
+  quantity    Int
+  unitCost    Decimal  @db.Decimal(12, 2) @map("unit_cost")
+  unitPrice   Decimal  @db.Decimal(12, 2) @map("unit_price")
+  createdAt   DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
-  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  order   Order    @relation(fields: [orderId, userId], references: [id, userId], onDelete: Cascade)
+  product Product? @relation(fields: [productId, userId], references: [id, userId])
 
+  @@unique([id, userId])
   @@index([orderId])
   @@index([productId])
 
@@ -144,20 +164,23 @@ model OrderItem {
 }
 
 model ContentPost {
-  id          String          @id @default(uuid()) @db.Uuid
-  userId      String          @db.Uuid @map("user_id")
+  id          String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String          @db.Uuid @map("owner_id")
   platform    ContentPlatform
   status      ContentStatus   @default(IDEA)
   title       String
   idea        String?
+  script      String?
   caption     String?
+  assets      Json            @default(dbgenerated("'{}'::jsonb"))
   scheduledAt DateTime?       @map("scheduled_at")
   postedAt    DateTime?       @map("posted_at")
-  createdAt   DateTime        @default(now()) @map("created_at")
-  updatedAt   DateTime        @updatedAt @map("updated_at")
+  createdAt   DateTime        @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime        @updatedAt @map("updated_at") @db.Timestamptz
 
   user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([id, userId])
   @@index([userId])
   @@index([status])
   @@index([platform])
@@ -167,18 +190,23 @@ model ContentPost {
 }
 
 model Reminder {
-  id          String    @id @default(uuid()) @db.Uuid
-  userId      String    @db.Uuid @map("user_id")
-  customerId  String    @db.Uuid @map("customer_id")
-  dueAt       DateTime  @map("due_at")
-  completedAt DateTime? @map("completed_at")
+  id          String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String    @db.Uuid @map("owner_id")
+  customerId  String?   @db.Uuid @map("customer_id")
+  orderId     String?   @db.Uuid @map("order_id")
+  dueAt       DateTime  @map("due_at") @db.Timestamptz
+  completedAt DateTime? @map("completed_at") @db.Timestamptz
+  channel     String    @default("APP")
+  title       String?
   note        String?
-  createdAt   DateTime  @default(now()) @map("created_at")
-  updatedAt   DateTime  @updatedAt @map("updated_at")
+  createdAt   DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt   DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
-  user     Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  customer Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  user     Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  customer Customer?  @relation(fields: [customerId, userId], references: [id, userId])
+  order    Order?     @relation(fields: [orderId, userId], references: [id, userId])
 
+  @@unique([id, userId])
   @@index([userId])
   @@index([customerId])
   @@index([dueAt])
@@ -187,16 +215,18 @@ model Reminder {
 }
 
 model ActivityLog {
-  id         String   @id @default(uuid()) @db.Uuid
-  userId     String   @db.Uuid @map("user_id")
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String   @db.Uuid @map("owner_id")
   action     String
   entityType String   @map("entity_type")
-  entityId   String?  @map("entity_id")
-  metadata   Json?
-  createdAt  DateTime @default(now()) @map("created_at")
+  entityId   String?  @map("entity_id") @db.Uuid
+  metadata   Json     @default(dbgenerated("'{}'::jsonb"))
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz
 
   user Profile @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([id, userId])
   @@index([userId])
   @@index([createdAt])
   @@index([entityType])

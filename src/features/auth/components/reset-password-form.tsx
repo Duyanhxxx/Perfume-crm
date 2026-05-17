@@ -32,7 +32,7 @@ export function ResetPasswordForm() {
         try {
           const supabase = createSupabaseBrowserClient();
           if (!supabase) {
-            toast.error("Missing Supabase env. Visit /setup.");
+            toast.error("Thiếu biến môi trường Supabase. Vui lòng vào /setup.");
             return;
           }
           const { error } = await supabase.auth.updateUser({
@@ -40,7 +40,7 @@ export function ResetPasswordForm() {
           });
           if (error) toast.error(error.message);
           else {
-            toast.success("Password updated.");
+            toast.success("Đã cập nhật mật khẩu.");
             router.replace("/dashboard");
           }
         } finally {
@@ -49,11 +49,11 @@ export function ResetPasswordForm() {
       })}
     >
       <div className="space-y-2">
-        <Label htmlFor="password">New password</Label>
+        <Label htmlFor="password">Mật khẩu mới</Label>
         <Input id="password" type="password" autoComplete="new-password" {...form.register("password")} />
       </div>
       <Button className="w-full" type="submit" disabled={pending}>
-        Update password
+        Cập nhật mật khẩu
       </Button>
     </form>
   );

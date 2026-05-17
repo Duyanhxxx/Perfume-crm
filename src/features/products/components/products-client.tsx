@@ -96,7 +96,7 @@ export function ProductsClient({ products }: { products: ProductRow[] }) {
       <div className="flex items-center justify-end gap-2">
         <Button variant="secondary" onClick={() => downloadCsv("products.csv", toCsv(products))}>
           <Download className="h-4 w-4" />
-          Export CSV
+          Xuất CSV
         </Button>
         <Dialog
           open={open}
@@ -113,19 +113,19 @@ export function ProductsClient({ products }: { products: ProductRow[] }) {
               }}
             >
               <Plus className="h-4 w-4" />
-              Add Product
+              Thêm sản phẩm
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{editing ? "Edit product" : "New product"}</DialogTitle>
+              <DialogTitle>{editing ? "Sửa sản phẩm" : "Sản phẩm mới"}</DialogTitle>
             </DialogHeader>
             <form
               className="space-y-4"
               onSubmit={form.handleSubmit(async (values) => {
                 const res = await upsertProductAction(values);
                 if (res.ok) {
-                  toast.success("Saved");
+                  toast.success("Đã lưu");
                   setOpen(false);
                   router.refresh();
                 }
@@ -133,47 +133,47 @@ export function ProductsClient({ products }: { products: ProductRow[] }) {
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name">Tên</Label>
                   <Input id="name" {...form.register("name")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="brand">Brand</Label>
+                  <Label htmlFor="brand">Thương hiệu</Label>
                   <Input id="brand" {...form.register("brand")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="volumeMl">Volume (ml)</Label>
+                  <Label htmlFor="volumeMl">Dung tích (ml)</Label>
                   <Input id="volumeMl" inputMode="numeric" {...form.register("volumeMl")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="costPrice">Cost price</Label>
+                  <Label htmlFor="costPrice">Giá vốn (VND)</Label>
                   <Input id="costPrice" inputMode="decimal" {...form.register("costPrice")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="sellPrice">Sell price</Label>
+                  <Label htmlFor="sellPrice">Giá bán (VND)</Label>
                   <Input id="sellPrice" inputMode="decimal" {...form.register("sellPrice")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="stock">Stock</Label>
+                  <Label htmlFor="stock">Tồn kho</Label>
                   <Input id="stock" inputMode="numeric" {...form.register("stock")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="lowStockThreshold">Low stock alert</Label>
+                  <Label htmlFor="lowStockThreshold">Cảnh báo tồn kho thấp</Label>
                   <Input id="lowStockThreshold" inputMode="numeric" {...form.register("lowStockThreshold")} />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="imageUrl">Image URL</Label>
+                  <Label htmlFor="imageUrl">Link ảnh</Label>
                   <Input id="imageUrl" {...form.register("imageUrl")} />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">Mô tả</Label>
                   <Textarea id="description" {...form.register("description")} />
                 </div>
               </div>
               <div className="flex items-center justify-end gap-2">
                 <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                  Cancel
+                  Huỷ
                 </Button>
-                <Button type="submit">Save</Button>
+                <Button type="submit">Lưu</Button>
               </div>
             </form>
           </DialogContent>
@@ -183,7 +183,7 @@ export function ProductsClient({ products }: { products: ProductRow[] }) {
       <Card className="bg-card/60">
         <CardContent className="pt-4">
           <Input
-            placeholder="Search products…"
+            placeholder="Tìm sản phẩm…"
             defaultValue={q}
             onChange={(e) => onSearch(e.target.value)}
             className="sm:max-w-sm"
@@ -196,9 +196,9 @@ export function ProductsClient({ products }: { products: ProductRow[] }) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Brand</TableHead>
-                <TableHead>Stock</TableHead>
+                <TableHead>Tên</TableHead>
+                <TableHead>Thương hiệu</TableHead>
+                <TableHead>Tồn kho</TableHead>
                 <TableHead className="text-right" />
               </TableRow>
             </TableHeader>
@@ -206,7 +206,7 @@ export function ProductsClient({ products }: { products: ProductRow[] }) {
               {products.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={4} className="py-10 text-center text-muted-foreground">
-                    No products yet.
+                    Chưa có sản phẩm.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -235,9 +235,9 @@ export function ProductsClient({ products }: { products: ProductRow[] }) {
                             size="icon"
                             variant="ghost"
                             onClick={async () => {
-                              if (!confirm("Delete this product?")) return;
+                              if (!confirm("Xoá sản phẩm này?")) return;
                               await deleteProductAction({ id: p.id });
-                              toast.success("Deleted");
+                              toast.success("Đã xoá");
                               router.refresh();
                             }}
                           >

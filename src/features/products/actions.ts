@@ -21,6 +21,7 @@ export async function upsertProductAction(raw: unknown) {
     lowStockThreshold: input.lowStockThreshold ?? 5,
     description: input.description || null,
     imageUrl: input.imageUrl || null,
+    currency: "VND",
   };
 
   const id = input.id

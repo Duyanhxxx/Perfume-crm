@@ -32,6 +32,9 @@ type OrderRow = {
 
 type Option = { id: string; label: string; meta?: string };
 
+const vnd = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
+const formatVnd = (value: string) => vnd.format(Math.round(Number(value)));
+
 function selectClassName() {
   return cn(
     "flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
@@ -75,7 +78,7 @@ export function OrdersClient({
     defaultValues: {
       customerId: "",
       status: "PENDING",
-      currency: "USD",
+      currency: "VND",
       notes: "",
       items: [{ productId: products[0]?.id ?? "", quantity: 1 }],
     },
@@ -84,11 +87,11 @@ export function OrdersClient({
   const items = useFieldArray({ control: form.control, name: "items" });
 
   const statusBadge = (s: string) => {
-    if (s === "COMPLETED") return <Badge variant="secondary">COMPLETED</Badge>;
-    if (s === "RETURNED") return <Badge variant="destructive">RETURNED</Badge>;
-    if (s === "SHIPPING") return <Badge>SHIPPING</Badge>;
-    if (s === "PACKING") return <Badge variant="outline">PACKING</Badge>;
-    return <Badge variant="outline">PENDING</Badge>;
+    if (s === "COMPLETED") return <Badge variant="secondary">HOÀN TẤT</Badge>;
+    if (s === "RETURNED") return <Badge variant="destructive">TRẢ HÀNG</Badge>;
+    if (s === "SHIPPING") return <Badge>ĐANG GIAO</Badge>;
+    if (s === "PACKING") return <Badge variant="outline">ĐÓNG GÓI</Badge>;
+    return <Badge variant="outline">CHỜ XỬ LÝ</Badge>;
   };
 
   return (
@@ -96,18 +99,18 @@ export function OrdersClient({
       <div className="flex items-center justify-end gap-2">
         <Button variant="secondary" onClick={() => downloadCsv("orders.csv", toCsv(orders))}>
           <Download className="h-4 w-4" />
-          Export CSV
+          Xuất CSV
         </Button>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button>
               <Plus className="h-4 w-4" />
-              Create Order
+              Tạo đơn
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>New order</DialogTitle>
+              <DialogTitle>Đơn hàng mới</DialogTitle>
             </DialogHeader>
             <form
               className="space-y-4"
@@ -115,7 +118,7 @@ export function OrdersClient({
                 try {
                   const res = await createOrderAction(values);
                   if (res.ok) {
-                    toast.success("Order created");
+                    toast.success("Tạo đơn hàng thành công");
                     setOpen(false);
                     router.refresh();
                   }
@@ -123,16 +126,16 @@ export function OrdersClient({
                   const message =
                     e && typeof e === "object" && "message" in e
                       ? String((e as { message: unknown }).message)
-                      : "Failed";
+                      : "Thất bại";
                   toast.error(message);
                 }
               })}
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="customerId">Customer</Label>
+                  <Label htmlFor="customerId">Khách hàng</Label>
                   <select id="customerId" className={selectClassName()} {...form.register("customerId")}>
-                    <option value="">Walk-in</option>
+                    <option value="">Khách lẻ</option>
                     {customers.map((c) => (
                       <option key={c.id} value={c.id}>
                         {c.label}
@@ -141,20 +144,20 @@ export function OrdersClient({
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="status">Status</Label>
+                  <Label htmlFor="status">Trạng thái</Label>
                   <select id="status" className={selectClassName()} {...form.register("status")}>
-                    <option value="PENDING">Pending</option>
-                    <option value="PACKING">Packing</option>
-                    <option value="SHIPPING">Shipping</option>
-                    <option value="COMPLETED">Completed</option>
-                    <option value="RETURNED">Returned</option>
-                    <option value="CANCELLED">Cancelled</option>
+                    <option value="PENDING">Chờ xử lý</option>
+                    <option value="PACKING">Đang đóng gói</option>
+                    <option value="SHIPPING">Đang giao</option>
+                    <option value="COMPLETED">Hoàn tất</option>
+                    <option value="RETURNED">Trả hàng</option>
+                    <option value="CANCELLED">Huỷ</option>
                   </select>
                 </div>
               </div>
 
               <div className="space-y-3">
-                <div className="text-sm font-medium">Items</div>
+                <div className="text-sm font-medium">Sản phẩm</div>
                 <div className="space-y-2">
                   {items.fields.map((f, idx) => (
                     <div key={f.id} className="grid gap-2 sm:grid-cols-[1fr_120px_96px]">
@@ -179,7 +182,7 @@ export function OrdersClient({
                         onClick={() => items.remove(idx)}
                         disabled={items.fields.length === 1}
                       >
-                        Remove
+                        Xoá
                       </Button>
                     </div>
                   ))}
@@ -192,21 +195,21 @@ export function OrdersClient({
                   }
                   disabled={products.length === 0}
                 >
-                  Add item
+                  Thêm sản phẩm
                 </Button>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="notes">Notes</Label>
+                <Label htmlFor="notes">Ghi chú</Label>
                 <Input id="notes" {...form.register("notes")} />
               </div>
 
               <div className="flex items-center justify-end gap-2">
                 <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                  Cancel
+                  Huỷ
                 </Button>
                 <Button type="submit" disabled={products.length === 0}>
-                  Create
+                  Tạo
                 </Button>
               </div>
             </form>
@@ -218,7 +221,7 @@ export function OrdersClient({
         <Card className="bg-card/60 lg:col-span-2">
           <CardContent className="pt-6">
             <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              Orders this week
+              Đơn hàng tuần này
             </div>
             <div className="mt-2 flex items-end gap-4">
               <div className="font-serif text-5xl font-semibold">
@@ -240,16 +243,16 @@ export function OrdersClient({
         <Card className="bg-card/60">
           <CardContent className="pt-6">
             <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              Pending shipment
+              Chờ giao hàng
             </div>
             <div className="mt-2 font-serif text-5xl font-semibold">
               {stats.pendingShipment}
             </div>
             <div className="mt-2 text-sm text-muted-foreground">
-              Requires processing within 24h to meet luxury SLA.
+              Cần xử lý trong 24h để đảm bảo SLA.
             </div>
             <Button className="mt-4 w-full" variant="secondary">
-              Review Queue
+              Xem danh sách
             </Button>
           </CardContent>
         </Card>
@@ -261,21 +264,21 @@ export function OrdersClient({
           variant={tab === "ALL" ? "secondary" : "ghost"}
           onClick={() => setTab("ALL")}
         >
-          All
+          Tất cả
         </Button>
         <Button
           size="sm"
           variant={tab === "PENDING" ? "secondary" : "ghost"}
           onClick={() => setTab("PENDING")}
         >
-          Pending
+          Chờ xử lý
         </Button>
         <Button
           size="sm"
           variant={tab === "COMPLETED" ? "secondary" : "ghost"}
           onClick={() => setTab("COMPLETED")}
         >
-          Completed
+          Hoàn tất
         </Button>
       </div>
 
@@ -284,11 +287,11 @@ export function OrdersClient({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Order</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Items</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>Đơn</TableHead>
+                <TableHead>Khách hàng</TableHead>
+                <TableHead>Sản phẩm</TableHead>
+                <TableHead>Tổng</TableHead>
+                <TableHead>Trạng thái</TableHead>
                 <TableHead className="text-right" />
               </TableRow>
             </TableHeader>
@@ -296,7 +299,7 @@ export function OrdersClient({
               {filtered.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                    No orders yet.
+                    Chưa có đơn hàng.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -307,11 +310,11 @@ export function OrdersClient({
                     </TableCell>
                     <TableCell className="text-muted-foreground">{o.customer}</TableCell>
                     <TableCell className="text-muted-foreground">{o.items}</TableCell>
-                    <TableCell className="font-medium">${o.total}</TableCell>
+                    <TableCell className="font-medium">{formatVnd(o.total)}</TableCell>
                     <TableCell>{statusBadge(o.status)}</TableCell>
                     <TableCell className="text-right">
                       <Link className="text-primary hover:underline" href={`/orders/${o.id}`}>
-                        Invoice
+                        Hoá đơn
                       </Link>
                     </TableCell>
                   </TableRow>

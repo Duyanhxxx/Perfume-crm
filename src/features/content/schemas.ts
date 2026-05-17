@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const contentPlatformSchema = z.enum(["TIKTOK", "INSTAGRAM"]);
+export const contentPlatformSchema = z.enum(["TIKTOK", "INSTAGRAM", "YOUTUBE_SHORTS"]);
 export const contentStatusSchema = z.enum([
   "IDEA",
   "SCRIPT",
@@ -21,4 +21,3 @@ export const upsertContentPostSchema = z.object({
 });
 
 export type UpsertContentPostInput = z.input<typeof upsertContentPostSchema>;
-

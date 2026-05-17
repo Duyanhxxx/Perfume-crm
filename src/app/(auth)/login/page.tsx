@@ -49,18 +49,18 @@ export default async function LoginPage(props: {
             </div>
           </div>
 
-          <h2 className="font-serif text-4xl tracking-tight">Welcome Back</h2>
+          <h2 className="font-serif text-4xl tracking-tight">Chào mừng quay lại</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Please enter your credentials to access the atelier.
+            Vui lòng nhập thông tin để truy cập hệ thống.
           </p>
 
           <div className="mt-8 space-y-8">
             <SignInForm next={next} />
 
             <div className="text-xs text-muted-foreground">
-              Don&apos;t have an account?{" "}
+              Chưa có tài khoản?{" "}
               <Link className="text-primary hover:underline" href="/register">
-                Contact the administrator
+                Liên hệ quản trị viên
               </Link>
             </div>
           </div>

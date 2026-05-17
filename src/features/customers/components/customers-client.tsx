@@ -29,10 +29,13 @@ type CustomerRow = {
   favoriteScent: string | null;
   socialLink: string | null;
   notes: string | null;
-  status: "ACTIVE" | "INACTIVE" | "VIP";
+  status: string;
   lastEngagement: string | null;
   lifetimeValue: string;
 };
+
+const vnd = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
+const formatVnd = (value: string) => vnd.format(Math.round(Number(value)));
 
 function selectClassName() {
   return cn(
@@ -77,7 +80,7 @@ export function CustomersClient({
         favoriteScent: editing.favoriteScent ?? "",
         socialLink: editing.socialLink ?? "",
         notes: editing.notes ?? "",
-        status: editing.status,
+        status: editing.status === "VIP" || editing.status === "INACTIVE" ? editing.status : "ACTIVE",
       });
     } else {
       form.reset({
@@ -109,7 +112,8 @@ export function CustomersClient({
   const statusBadge = (s: CustomerRow["status"]) => {
     if (s === "VIP") return <Badge>VIP</Badge>;
     if (s === "INACTIVE") return <Badge variant="outline">INACTIVE</Badge>;
-    return <Badge variant="secondary">ACTIVE</Badge>;
+    if (s === "ACTIVE") return <Badge variant="secondary">ACTIVE</Badge>;
+    return <Badge variant="outline">{s}</Badge>;
   };
 
   return (
@@ -129,7 +133,7 @@ export function CustomersClient({
               onClick={() => downloadCsv("customers.csv", toCsv(customers))}
             >
               <Download className="h-4 w-4" />
-              Export CSV
+              Xuất CSV
             </Button>
             <DialogTrigger asChild>
               <Button
@@ -139,20 +143,20 @@ export function CustomersClient({
                 }}
               >
                 <Plus className="h-4 w-4" />
-                Add Customer
+                Thêm khách hàng
               </Button>
             </DialogTrigger>
           </div>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>{editing ? "Edit customer" : "New customer"}</DialogTitle>
+              <DialogTitle>{editing ? "Sửa khách hàng" : "Khách hàng mới"}</DialogTitle>
             </DialogHeader>
             <form
               className="space-y-4"
               onSubmit={form.handleSubmit(async (values) => {
                 const res = await upsertCustomerAction(values);
                 if (res.ok) {
-                  toast.success("Saved");
+                  toast.success("Đã lưu");
                   setOpen(false);
                   router.refresh();
                 }
@@ -160,43 +164,43 @@ export function CustomersClient({
             >
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="name">Name</Label>
+                  <Label htmlFor="name">Tên</Label>
                   <Input id="name" {...form.register("name")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="phone">Phone</Label>
+                  <Label htmlFor="phone">Số điện thoại</Label>
                   <Input id="phone" {...form.register("phone")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="status">Status</Label>
+                  <Label htmlFor="status">Trạng thái</Label>
                   <select id="status" className={selectClassName()} {...form.register("status")}>
-                    <option value="ACTIVE">Active</option>
+                    <option value="ACTIVE">Đang hoạt động</option>
                     <option value="VIP">VIP</option>
-                    <option value="INACTIVE">Inactive</option>
+                    <option value="INACTIVE">Không hoạt động</option>
                   </select>
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="address">Address</Label>
+                  <Label htmlFor="address">Địa chỉ</Label>
                   <Input id="address" {...form.register("address")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="favoriteScent">Signature accord</Label>
+                  <Label htmlFor="favoriteScent">Mùi hương yêu thích</Label>
                   <Input id="favoriteScent" {...form.register("favoriteScent")} />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="socialLink">Social link</Label>
+                  <Label htmlFor="socialLink">Liên kết mạng xã hội</Label>
                   <Input id="socialLink" {...form.register("socialLink")} />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <Label htmlFor="notes">Notes</Label>
+                  <Label htmlFor="notes">Ghi chú</Label>
                   <Textarea id="notes" {...form.register("notes")} />
                 </div>
               </div>
               <div className="flex items-center justify-end gap-2">
                 <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                  Cancel
+                  Huỷ
                 </Button>
-                <Button type="submit">Save</Button>
+                <Button type="submit">Lưu</Button>
               </div>
             </form>
           </DialogContent>
@@ -213,14 +217,14 @@ export function CustomersClient({
                 value={status}
                 onChange={(e) => onStatus(e.target.value)}
               >
-                <option value="">All statuses</option>
-                <option value="ACTIVE">Active</option>
+                <option value="">Tất cả</option>
+                <option value="ACTIVE">Đang hoạt động</option>
                 <option value="VIP">VIP</option>
-                <option value="INACTIVE">Inactive</option>
+                <option value="INACTIVE">Không hoạt động</option>
               </select>
             </div>
             <Input
-              placeholder="Search customers…"
+              placeholder="Tìm khách hàng…"
               defaultValue={q}
               onChange={(e) => onSearch(e.target.value)}
               className="sm:max-w-sm"
@@ -234,12 +238,12 @@ export function CustomersClient({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Client Name</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Signature Accord</TableHead>
-                <TableHead>Last Engagement</TableHead>
-                <TableHead className="text-right">Lifetime Value</TableHead>
+                <TableHead>Khách hàng</TableHead>
+                <TableHead>Số điện thoại</TableHead>
+                <TableHead>Trạng thái</TableHead>
+                <TableHead>Mùi hương</TableHead>
+                <TableHead>Lần tương tác</TableHead>
+                <TableHead className="text-right">Giá trị</TableHead>
                 <TableHead className="text-right" />
               </TableRow>
             </TableHeader>
@@ -247,7 +251,7 @@ export function CustomersClient({
               {customers.length === 0 ? (
                 <TableRow>
                   <TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
-                    No customers yet.
+                    Chưa có khách hàng.
                   </TableCell>
                 </TableRow>
               ) : (
@@ -284,14 +288,14 @@ export function CustomersClient({
                         : "—"}
                     </TableCell>
                     <TableCell className="text-right font-medium">
-                      ${Number(c.lifetimeValue).toLocaleString()}
+                      {formatVnd(c.lifetimeValue)}
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="inline-flex items-center gap-2">
                         <Button
                           size="icon"
                           variant="ghost"
-                          aria-label="Edit"
+                          aria-label="Sửa"
                           onClick={() => {
                             setEditing(c);
                             setOpen(true);
@@ -302,11 +306,11 @@ export function CustomersClient({
                         <Button
                           size="icon"
                           variant="ghost"
-                          aria-label="Delete"
+                          aria-label="Xoá"
                           onClick={async () => {
-                            if (!confirm("Delete this customer?")) return;
+                            if (!confirm("Xoá khách hàng này?")) return;
                             await deleteCustomerAction({ id: c.id });
-                            toast.success("Deleted");
+                            toast.success("Đã xoá");
                             router.refresh();
                           }}
                         >

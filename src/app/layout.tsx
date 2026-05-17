@@ -19,8 +19,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "ScentFlow CRM",
-  description: "Perfume CRM dashboard",
+  title: "CRM Nước hoa",
+  description: "Bảng điều khiển CRM nước hoa",
 };
 
 export default function RootLayout({

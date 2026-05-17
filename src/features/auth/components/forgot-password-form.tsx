@@ -29,7 +29,7 @@ export function ForgotPasswordForm() {
         startTransition(async () => {
           const res = await forgotPasswordAction(values);
           if (res?.ok === false) toast.error(res.message);
-          else toast.success("Password reset email sent.");
+          else toast.success("Đã gửi email đặt lại mật khẩu.");
         });
       })}
     >
@@ -38,9 +38,8 @@ export function ForgotPasswordForm() {
         <Input id="email" autoComplete="email" {...form.register("email")} />
       </div>
       <Button className="w-full" type="submit" disabled={pending}>
-        Send reset link
+        Gửi link đặt lại
       </Button>
     </form>
   );
 }
-

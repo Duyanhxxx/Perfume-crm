@@ -48,7 +48,7 @@ export function SignInForm({ next }: { next?: string }) {
       })}
     >
       <div className="space-y-2">
-        <Label htmlFor="email">Email Address</Label>
+        <Label htmlFor="email">Email</Label>
         <Input
           id="email"
           autoComplete="email"
@@ -57,7 +57,7 @@ export function SignInForm({ next }: { next?: string }) {
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">Mật khẩu</Label>
         <Input
           id="password"
           type="password"
@@ -74,15 +74,15 @@ export function SignInForm({ next }: { next?: string }) {
             checked={rememberMe}
             onChange={(e) => setRememberMe(e.target.checked)}
           />
-          Remember Me
+          Ghi nhớ email
         </label>
         <Link className="text-xs text-primary hover:underline" href="/forgot-password">
-          Forgot Password?
+          Quên mật khẩu?
         </Link>
       </div>
 
       <Button className="w-full" type="submit" disabled={pending}>
-        Sign in
+        Đăng nhập
       </Button>
 
       <div className="relative py-2">
@@ -90,7 +90,7 @@ export function SignInForm({ next }: { next?: string }) {
           <div className="w-full border-t border-border" />
         </div>
         <div className="relative flex justify-center">
-          <span className="bg-background px-3 text-xs text-muted-foreground">OR</span>
+          <span className="bg-background px-3 text-xs text-muted-foreground">HOẶC</span>
         </div>
       </div>
 
@@ -124,7 +124,7 @@ export function SignInForm({ next }: { next?: string }) {
             d="M43.611 20.083H42V20H24v8h11.303a12.07 12.07 0 0 1-3.438 4.742h.002l6.732 5.705C38.122 38.8 44 34.5 44 24c0-1.341-.138-2.651-.389-3.917Z"
           />
         </svg>
-        Continue with Google
+        Tiếp tục với Google
       </Button>
     </form>
   );

@@ -22,7 +22,7 @@ export async function logActivity(input: {
       action: input.action,
       entityType: input.entityType,
       entityId: input.entityId,
-      metadata: input.metadata,
+      ...(input.metadata ? { metadata: input.metadata } : {}),
     },
   });
 }

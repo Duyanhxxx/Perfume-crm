@@ -24,10 +24,10 @@ export default async function CustomersPage(props: {
     <div className="space-y-6">
       <div className="space-y-2">
         <h1 className="font-serif text-4xl font-semibold tracking-tight">
-          Clientele
+          Khách hàng
         </h1>
         <p className="max-w-2xl text-sm text-muted-foreground">
-          Manage your atelier’s relationships. View purchasing histories, favorite accords, and bespoke client statuses.
+          Quản lý khách hàng, lịch sử mua, mùi hương yêu thích và trạng thái.
         </p>
       </div>
 

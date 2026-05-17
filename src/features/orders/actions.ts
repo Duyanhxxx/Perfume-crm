@@ -23,25 +23,26 @@ export async function createOrderAction(raw: unknown) {
     if (!p) throw new Error("Invalid product");
     return {
       productId: p.id,
+      productName: p.name,
       quantity: i.quantity,
       unitCost: p.costPrice,
       unitPrice: p.sellPrice,
     };
   });
 
-  const toCents = (v: { toString(): string }) =>
-    Math.round(Number(v.toString()) * 100);
-  const subtotalCents = items.reduce(
-    (acc, i) => acc + toCents(i.unitPrice) * i.quantity,
-    0,
-  );
-  const profitCents = items.reduce(
-    (acc, i) =>
-      acc + (toCents(i.unitPrice) - toCents(i.unitCost)) * i.quantity,
-    0,
-  );
-  const subtotal = (subtotalCents / 100).toFixed(2);
-  const profit = (profitCents / 100).toFixed(2);
+  const toNumber = (v: { toString(): string }) => Number(v.toString());
+  const subtotal = items
+    .reduce((acc, i) => acc + toNumber(i.unitPrice) * i.quantity, 0)
+    .toFixed(0);
+  const cost = items
+    .reduce((acc, i) => acc + toNumber(i.unitCost) * i.quantity, 0)
+    .toFixed(0);
+  const profit = items
+    .reduce(
+      (acc, i) => acc + (toNumber(i.unitPrice) - toNumber(i.unitCost)) * i.quantity,
+      0,
+    )
+    .toFixed(0);
 
   const order = await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
     for (const i of items) {
@@ -57,13 +58,17 @@ export async function createOrderAction(raw: unknown) {
         customerId: input.customerId ? input.customerId : null,
         status: input.status,
         subtotal,
+        shippingFee: "0",
         total: subtotal,
+        cost,
         profit,
         currency: input.currency,
         notes: input.notes || null,
         items: {
           create: items.map((i) => ({
+            userId: user.id,
             productId: i.productId,
+            productName: i.productName,
             quantity: i.quantity,
             unitCost: i.unitCost,
             unitPrice: i.unitPrice,

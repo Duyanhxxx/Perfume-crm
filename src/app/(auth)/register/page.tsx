@@ -7,12 +7,12 @@ export default function RegisterPage() {
   return (
     <div className="mx-auto flex min-h-screen max-w-screen-sm items-center px-6 py-12">
       <AuthCard
-        title="Create account"
-        subtitle="Single-admin setup. Use your business email."
+        title="Tạo tài khoản"
+        subtitle="Thiết lập 1 quản trị viên. Dùng email công ty."
         footer={
           <div className="text-center">
             <Link className="text-muted-foreground hover:text-foreground" href="/login">
-              Back to sign in
+              Quay lại đăng nhập
             </Link>
           </div>
         }

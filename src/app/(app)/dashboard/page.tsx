@@ -23,6 +23,7 @@ function statusVariant(status: string) {
 }
 
 export default function DashboardPage() {
+  const vnd = new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" });
   const totalRevenue = revenueSeries.reduce((acc, v) => acc + v.revenue, 0);
   const totalOrders = revenueSeries.reduce((acc, v) => acc + v.orders, 0);
 
@@ -31,14 +32,14 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div className="space-y-1">
           <h1 className="font-serif text-4xl font-semibold tracking-tight">
-            Overview
+            Tổng quan
           </h1>
           <p className="text-sm text-muted-foreground">
-            Your atelier’s performance at a glance.
+            Tình hình hoạt động của bạn trong nháy mắt.
           </p>
         </div>
         <Button>
-          Export Report
+          Xuất báo cáo
           <ArrowUpRight className="ml-2 h-4 w-4 text-primary" />
         </Button>
       </div>
@@ -47,13 +48,13 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              Revenue Today
+              Doanh thu hôm nay
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="space-y-1">
             <div className="font-serif text-3xl font-semibold">
-              ${Math.round(totalRevenue / 7).toLocaleString()}
+              {vnd.format(Math.round(totalRevenue / 7))}
             </div>
             <div className="text-xs text-primary">+14.2%</div>
           </CardContent>
@@ -61,13 +62,13 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              Monthly Revenue
+              Doanh thu tháng
             </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="space-y-1">
             <div className="font-serif text-3xl font-semibold">
-              ${(totalRevenue * 4).toLocaleString()}
+              {vnd.format(totalRevenue * 4)}
             </div>
             <div className="text-xs text-primary">+8.4%</div>
           </CardContent>
@@ -75,7 +76,7 @@ export default function DashboardPage() {
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              Total Orders
+              Tổng đơn hàng
             </CardTitle>
             <Receipt className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
@@ -83,19 +84,19 @@ export default function DashboardPage() {
             <div className="font-serif text-3xl font-semibold">
               {(totalOrders * 7).toLocaleString()}
             </div>
-            <div className="text-xs text-muted-foreground">Current month</div>
+            <div className="text-xs text-muted-foreground">Trong tháng</div>
           </CardContent>
         </Card>
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <CardTitle className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-              Pending Orders
+              Đơn chờ xử lý
             </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="space-y-1">
             <div className="font-serif text-3xl font-semibold">12</div>
-            <div className="text-xs text-muted-foreground">Requires attention</div>
+            <div className="text-xs text-muted-foreground">Cần xử lý</div>
           </CardContent>
         </Card>
       </div>
@@ -107,11 +108,11 @@ export default function DashboardPage() {
             <div className="flex items-center gap-4 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
               <span className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-primary" />
-                Revenue
+                Doanh thu
               </span>
               <span className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-[rgba(228,226,225,0.35)]" />
-                Profit
+                Lợi nhuận
               </span>
             </div>
           </CardHeader>
@@ -122,7 +123,7 @@ export default function DashboardPage() {
 
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle>Best Sellers</CardTitle>
+            <CardTitle>Bán chạy</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent className="pt-2">
@@ -142,7 +143,7 @@ export default function DashboardPage() {
                     <div className="text-right">
                       <div className="text-sm text-muted-foreground">{p.sold}</div>
                       <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-                        Sales
+                        Số lượng
                       </div>
                     </div>
                   </div>
@@ -158,19 +159,19 @@ export default function DashboardPage() {
 
       <Card>
         <CardHeader className="flex-row items-center justify-between space-y-0">
-          <CardTitle>Recent Orders</CardTitle>
+          <CardTitle>Đơn gần đây</CardTitle>
           <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-primary">
-            View All
+            Xem tất cả
           </div>
         </CardHeader>
         <CardContent className="pt-2">
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Order</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Total</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>Đơn</TableHead>
+                <TableHead>Khách hàng</TableHead>
+                <TableHead>Tổng</TableHead>
+                <TableHead>Trạng thái</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -178,7 +179,7 @@ export default function DashboardPage() {
                 <TableRow key={o.id}>
                   <TableCell className="font-medium">{o.id}</TableCell>
                   <TableCell>{o.customer}</TableCell>
-                  <TableCell>${o.total.toLocaleString()}</TableCell>
+                  <TableCell>{vnd.format(o.total)}</TableCell>
                   <TableCell>
                     <Badge variant={statusVariant(o.status)}>{o.status}</Badge>
                   </TableCell>

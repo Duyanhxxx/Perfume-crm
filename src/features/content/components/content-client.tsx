@@ -19,7 +19,7 @@ import { upsertContentPostSchema, type UpsertContentPostInput } from "@/features
 
 type ContentRow = {
   id: string;
-  platform: "TIKTOK" | "INSTAGRAM";
+  platform: "TIKTOK" | "INSTAGRAM" | "YOUTUBE_SHORTS";
   status: "IDEA" | "SCRIPT" | "FILMING" | "EDITING" | "POSTED";
   title: string;
   idea: string | null;
@@ -86,6 +86,12 @@ export function ContentClient({ posts }: { posts: ContentRow[] }) {
   }, [posts]);
 
   const platformPill = (p: ContentRow["platform"]) => {
+    if (p === "YOUTUBE_SHORTS")
+      return (
+        <span className="inline-flex items-center gap-1 rounded-md bg-white/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-foreground">
+          YouTube Shorts
+        </span>
+      );
     if (p === "INSTAGRAM")
       return (
         <span className="inline-flex items-center gap-1 rounded-md bg-[linear-gradient(90deg,#ff4d4d,#ffb84d)] px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-black">

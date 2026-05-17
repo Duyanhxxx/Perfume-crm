@@ -12,7 +12,7 @@ export const orderStatusSchema = z.enum([
 export const createOrderSchema = z.object({
   customerId: z.string().uuid().optional().or(z.literal("")),
   status: orderStatusSchema.default("PENDING"),
-  currency: z.string().min(3).default("USD"),
+  currency: z.string().min(3).default("VND"),
   notes: z.string().optional().or(z.literal("")),
   items: z
     .array(

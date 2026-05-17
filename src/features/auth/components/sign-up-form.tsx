@@ -30,7 +30,7 @@ export function SignUpForm() {
         startTransition(async () => {
           const res = await signUpAction(values);
           if (res?.ok === false) toast.error(res.message);
-          else toast.success("Account created. You can sign in now.");
+          else toast.success("Tạo tài khoản thành công. Bạn có thể đăng nhập ngay.");
         });
       })}
     >
@@ -39,7 +39,7 @@ export function SignUpForm() {
         <Input id="email" autoComplete="email" {...form.register("email")} />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="password">Password</Label>
+        <Label htmlFor="password">Mật khẩu</Label>
         <Input
           id="password"
           type="password"
@@ -48,9 +48,8 @@ export function SignUpForm() {
         />
       </div>
       <Button className="w-full" type="submit" disabled={pending}>
-        Create account
+        Tạo tài khoản
       </Button>
     </form>
   );
 }
-
