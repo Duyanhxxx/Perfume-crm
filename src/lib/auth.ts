@@ -14,10 +14,17 @@ export async function requireAuth() {
 
   if (!user) redirect("/login");
 
-  await prisma.user.upsert({
+  await prisma.profile.upsert({
     where: { id: user.id },
-    create: { id: user.id, email: user.email ?? "" },
-    update: { email: user.email ?? "" },
+    create: {
+      id: user.id,
+      email: user.email ?? "",
+      fullName: (user.user_metadata?.full_name ?? user.user_metadata?.name) || null,
+    },
+    update: {
+      email: user.email ?? "",
+      fullName: (user.user_metadata?.full_name ?? user.user_metadata?.name) || null,
+    },
   });
 
   return { supabase, user };
