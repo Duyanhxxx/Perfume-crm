@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>L'Atelier CRM - Content Planner</title>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Playfair+Display:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface-variant": "#c4c7c7",
+                        "on-primary-container": "#7e7d7d",
+                        "surface-dim": "#131313",
+                        "primary-fixed-dim": "#c8c6c5",
+                        "error": "#ffb4ab",
+                        "surface": "#131313",
+                        "on-primary-fixed-variant": "#474646",
+                        "inverse-on-surface": "#303030",
+                        "surface-container": "#1f2020",
+                        "inverse-surface": "#e4e2e1",
+                        "secondary-fixed-dim": "#e9c349",
+                        "background": "#131313",
+                        "tertiary-container": "#121211",
+                        "secondary-container": "#af8d11",
+                        "on-tertiary-fixed-variant": "#484745",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed": "#1c1b1a",
+                        "surface-variant": "#353535",
+                        "on-tertiary": "#31302f",
+                        "secondary-fixed": "#ffe088",
+                        "surface-tint": "#c8c6c5",
+                        "surface-container-highest": "#353535",
+                        "on-secondary-fixed-variant": "#574500",
+                        "primary-container": "#121212",
+                        "on-primary-fixed": "#1c1b1b",
+                        "on-tertiary-container": "#7f7d7b",
+                        "error-container": "#93000a",
+                        "on-primary": "#313030",
+                        "on-error": "#690005",
+                        "on-secondary": "#3c2f00",
+                        "on-error-container": "#ffdad6",
+                        "surface-container-low": "#1b1c1c",
+                        "primary": "#c8c6c5",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-primary": "#5f5e5e",
+                        "outline-variant": "#444748",
+                        "secondary": "#e9c349",
+                        "tertiary-fixed-dim": "#c9c6c3",
+                        "on-secondary-container": "#342800",
+                        "tertiary": "#c9c6c3",
+                        "primary-fixed": "#e5e2e1",
+                        "outline": "#8e9192",
+                        "on-background": "#e4e2e1",
+                        "on-secondary-fixed": "#241a00",
+                        "tertiary-fixed": "#e5e2df",
+                        "surface-bright": "#393939",
+                        "on-surface": "#e4e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "gutter": "24px",
+                        "unit": "8px",
+                        "section-gap": "64px",
+                        "container-padding": "32px"
+                    },
+                    "fontFamily": {
+                        "body-lg": ["Geist"],
+                        "label-md": ["Geist"],
+                        "headline-lg": ["Playfair Display"],
+                        "display-lg": ["Playfair Display"],
+                        "label-sm": ["Geist"],
+                        "headline-md": ["Playfair Display"],
+                        "headline-lg-mobile": ["Playfair Display"],
+                        "body-md": ["Geist"]
+                    },
+                    "fontSize": {
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for Kanban board */
+        .kanban-scroll::-webkit-scrollbar {
+            height: 8px;
+            width: 8px;
+        }
+        .kanban-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .kanban-scroll::-webkit-scrollbar-thumb {
+            background-color: #353535; /* surface-variant */
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md antialiased overflow-hidden">
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full w-[280px] bg-surface-container/70 dark:bg-surface-container/70 backdrop-blur-xl border-r border-white/5 shadow-2xl flex flex-col py-8 px-6 space-y-8 z-40">
+<!-- Brand Header -->
+<div class="flex items-center space-x-4 px-2">
+<div class="h-10 w-10 rounded-full bg-surface-variant flex items-center justify-center border border-white/10 overflow-hidden">
+<img alt="Maison de Parfum Logo" class="h-full w-full object-cover" data-alt="A macro shot of liquid perfume swirling in a pristine glass vial, illuminated by moody, high-contrast studio lighting. The color palette is composed of rich amber and deep shadows, reflecting a high-end luxury aesthetic. The texture feels smooth and viscous, conveying an elite editorial vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7SkYqM88tHZ2qG1jVmU9N8meJzftVV64BsbcLulJD88nb3unolziikLbANZTu7s5S2YmAgFyvuncQrypg7ryfRx7qMuarS0iqObKGbmq1230TPjDlnNKQ74J3fBRNvDbpGpHfJp9wgTefRzeR2OpUp2uqLUCPQsbK71X4rs3j_9hNSlqJbj5gUgZR-TfB035HGYO-PoVHsaVfaaZppN7EcqZELaUt-byB2UVnNwdZlknhLBKWdGwRntbZXdNAzK1WmA0yUAT-ckI9"/>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md tracking-tighter text-on-surface dark:text-on-surface leading-tight">L'Atelier</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest mt-1">Perfume CRM</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col space-y-2">
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90 group" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary transition-colors" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90 group" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary transition-colors" data-icon="group">group</span>
+<span class="font-label-md text-label-md">Customers</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90 group" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary transition-colors" data-icon="shopping_cart">shopping_cart</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90 group" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary transition-colors" data-icon="inventory_2">inventory_2</span>
+<span class="font-label-md text-label-md">Products</span>
+</a>
+<!-- ACTIVE TAB -->
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim font-bold border-r-2 border-secondary bg-white/5 scale-95 active:scale-90 transition-all duration-300" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month" data-weight="fill" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+<span class="font-label-md text-label-md">Content Planner</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90 group" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary transition-colors" data-icon="monitoring">monitoring</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90 group mt-auto" href="#">
+<span class="material-symbols-outlined group-hover:text-secondary transition-colors" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="ml-[280px] w-[calc(100%-280px)] min-h-screen flex flex-col relative">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-280px)] z-50 bg-background/80 dark:bg-background/80 backdrop-blur-md border-b border-white/5 flex justify-between items-center h-20 px-gutter">
+<!-- Search / Left Area -->
+<div class="flex items-center w-1/3">
+<div class="relative w-full max-w-md flex items-center bg-surface-container/50 rounded-lg px-3 py-2 border border-white/5 focus-within:border-secondary/30 focus-within:ring-1 focus-within:ring-secondary/20 transition-all">
+<span class="material-symbols-outlined text-on-surface-variant mr-2 text-sm" data-icon="search">search</span>
+<input class="bg-transparent border-none outline-none text-on-surface font-body-md text-body-md w-full placeholder:text-on-surface-variant/50 focus:ring-0 p-0" placeholder="Search ideas, scripts, or assets..." type="text"/>
+</div>
+</div>
+<!-- Product Name Center -->
+<div class="absolute left-1/2 -translate-x-1/2">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface dark:text-on-surface opacity-50">L'Atelier</span>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center space-x-6">
+<button class="text-on-surface-variant hover:text-secondary transition-colors relative">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full border border-background"></span>
+</button>
+<div class="h-8 w-8 rounded-full bg-surface-variant border border-white/10 overflow-hidden cursor-pointer">
+<img alt="Creative Director Profile" class="h-full w-full object-cover" data-alt="A black and white portrait of a sophisticated woman with a sleek minimalist aesthetic. The lighting is soft and cinematic, casting subtle shadows that highlight elegant features. The overall mood is high-fashion editorial, consistent with a luxury brand director." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTYPjlKVuncqTwAr2E-HhjdQtotVK0vMolQfRxi5EoNeac7AjRcwvYPqV02jrqU3EniGpychVMM260vxKWrYZSNhe-yBPRihtnqWYFF1y1SA9n2nw27uFc0Ntg7UAJRZU1DcjArwJYiSeYqx1OuftQqYZZLAB7h4mj7yZ2vb-cm1HCh6KZYbCE9QG5NK5Br_D34hw-_5_WVitNnbc4RpcH9EjPrPNc0or667e0PMwibeXgbSI6LFtx_IdVHHetb2GEUrI8l9cfIdlv"/>
+</div>
+</div>
+</header>
+<!-- Canvas (Kanban Board) -->
+<main class="mt-20 p-container-padding flex-1 flex flex-col h-[calc(100vh-5rem)] overflow-hidden">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-8 shrink-0">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Content Planner</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2 max-w-xl">Organize and track your visual narratives across TikTok and Instagram.</p>
+</div>
+<button class="bg-transparent border border-secondary text-secondary hover:bg-secondary/10 px-6 py-3 rounded-DEFAULT font-label-md text-label-md transition-all duration-300 hover:scale-98 active:scale-95 flex items-center space-x-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="add">add</span>
+<span>New Content Idea</span>
+</button>
+</div>
+<!-- Board Container -->
+<div class="flex gap-6 overflow-x-auto flex-1 kanban-scroll pb-4">
+<!-- Column: Idea -->
+<div class="w-[340px] flex-shrink-0 flex flex-col h-full">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-outline-variant"></div>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Idea</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container py-1 px-2 rounded-md">3</span>
+</div>
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2">
+<!-- Card 1 -->
+<div class="bg-surface-container-high/40 backdrop-blur-md border border-white/5 rounded-xl p-5 hover:border-secondary/30 transition-all duration-300 cursor-grab group shadow-[0px_10px_30px_rgba(0,0,0,0.2)]">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider px-2 py-1 rounded bg-[#000000]/50 text-on-surface border border-white/10 flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="tag">tag</span>
+<span>TikTok</span>
+</span>
+<button class="text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">
+<span class="material-symbols-outlined text-[18px]" data-icon="more_horiz">more_horiz</span>
+</button>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface leading-snug mb-2 text-[20px]">Morning Routine with Santal 33</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm line-clamp-2 mb-4">Aesthetically pleasing morning rituals featuring the signature scent. Focus on minimal lighting.</p>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full bg-surface border-2 border-surface-container-high overflow-hidden">
+<img alt="Avatar" class="h-full w-full object-cover" data-alt="Small black and white portrait thumbnail of a fashion director. High contrast, elegant composition." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPblFttApkQCX71c0O5ZbJKXeB4MeKBYeiOlBu7PQ8zOYg2v03aXrTkhOq2C8U5ifdbjZCbwEyoDEDini4kLUgi0tCszYydgRxH43EgvEWLo7rbMBEZzqYR6AaDKwfgNOupjwzC2I-pipTj1HV7nlR3k4kB6u33U-M5aaa6bQi9CPWoIsQFyUiZNfVe0FeDnY5aiWtypOdS7a6Jz_zA4-vuV-rwUYukc3hZagfjVwEdxrAWRbk7_JZ-bAM_NLTuIrYhmZvPXhqjDJH"/>
+</div>
+</div>
+<div class="flex items-center space-x-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px]" data-icon="chat_bubble">chat_bubble</span>
+<span class="font-label-sm text-label-sm">2</span>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-high/40 backdrop-blur-md border border-white/5 rounded-xl p-5 hover:border-secondary/30 transition-all duration-300 cursor-grab group shadow-[0px_10px_30px_rgba(0,0,0,0.2)]">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider px-2 py-1 rounded bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center space-x-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="photo_camera">photo_camera</span>
+<span>Instagram</span>
+</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface leading-snug mb-2 text-[20px]">Behind the Scenes: Packaging</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm line-clamp-2 mb-4">ASMR style video showing the meticulous process of wrapping our luxury bottles.</p>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full bg-surface border-2 border-surface-container-high overflow-hidden">
+<span class="w-full h-full bg-secondary/20 flex items-center justify-center font-label-sm text-secondary">A</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Script -->
+<div class="w-[340px] flex-shrink-0 flex flex-col h-full">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-secondary/50"></div>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Script</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container py-1 px-2 rounded-md">1</span>
+</div>
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2">
+<!-- Card 3 -->
+<div class="bg-surface-container-high/40 backdrop-blur-md border border-white/5 rounded-xl p-5 hover:border-secondary/30 transition-all duration-300 cursor-grab group shadow-[0px_10px_30px_rgba(0,0,0,0.2)]">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider px-2 py-1 rounded bg-[#000000]/50 text-on-surface border border-white/10 flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="tag">tag</span>
+<span>TikTok</span>
+</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface leading-snug mb-2 text-[20px]">Top 5 Summer Scents</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm line-clamp-2 mb-4">Needs a strong hook. Reviewing drafts from the copy team.</p>
+<!-- Progress Bar for Script -->
+<div class="w-full bg-surface-container rounded-full h-1.5 mb-3">
+<div class="bg-secondary h-1.5 rounded-full" style="width: 65%"></div>
+</div>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex -space-x-2">
+<div class="h-6 w-6 rounded-full bg-surface border-2 border-surface-container-high overflow-hidden">
+<img alt="Avatar" class="h-full w-full object-cover" data-alt="Small portrait thumbnail of a male copywriter. Monochromatic, moody lighting, professional and sharp." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-Vug_EyM9Hzm_l_9fQ6zjuhJDkhxh2unoPZO9r95zjngd_arJdyAOYynKhy9vefRnWCwqLwbDDHCQIf11ASllYC8gulndKLKEgbJxkSsKlFzIZTwLybT-usdlhklOvFjeZhPUapnhr9FsmhpgqMj3UfQ1CMvi5ubVO_W_uP4DxaRqGFwZlehZylpwmI1b-1nazYU0AGeFIgKCVolSDBRqnf7d6w3OV0Wy6r9qNhiAGecErLugMAWYTcBIljUfq_nLPnSuyHtkukVF"/>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="edit_note">edit_note</span>
+                                    Drafting
+                                </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Filming -->
+<div class="w-[340px] flex-shrink-0 flex flex-col h-full">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-secondary"></div>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Filming</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container py-1 px-2 rounded-md">1</span>
+</div>
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2">
+<!-- Card 4 - Highlighted/Active -->
+<div class="bg-surface-container-high/60 backdrop-blur-xl border border-secondary/50 rounded-xl p-5 hover:border-secondary transition-all duration-300 cursor-grab group shadow-[0px_10px_30px_rgba(233,195,73,0.1)]">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider px-2 py-1 rounded bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center space-x-1 shadow-sm">
+<span class="material-symbols-outlined text-[14px]" data-icon="photo_camera">photo_camera</span>
+<span>Instagram Reel</span>
+</span>
+<span class="flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
+</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface leading-snug mb-2 text-[20px]">The History of Oud</h4>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm line-clamp-2 mb-4">Studio B booked for today. Prop stylist arriving at 10 AM.</p>
+<div class="flex items-center justify-between pt-3 border-t border-white/5">
+<div class="flex items-center space-x-2">
+<span class="material-symbols-outlined text-secondary text-[16px]" data-icon="videocam">videocam</span>
+<span class="font-label-sm text-label-sm text-secondary">In Studio</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Editing -->
+<div class="w-[340px] flex-shrink-0 flex flex-col h-full">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<h3 class="font-label-md text-label-md text-on-surface uppercase tracking-wider">Editing</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container py-1 px-2 rounded-md">1</span>
+</div>
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2">
+<!-- Card 5 -->
+<div class="bg-surface-container-high/40 backdrop-blur-md border border-white/5 rounded-xl p-5 hover:border-secondary/30 transition-all duration-300 cursor-grab group shadow-[0px_10px_30px_rgba(0,0,0,0.2)] opacity-80">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider px-2 py-1 rounded bg-[#000000]/50 text-on-surface border border-white/10 flex items-center space-x-1">
+<span class="material-symbols-outlined text-[14px]" data-icon="tag">tag</span>
+<span>TikTok</span>
+</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface leading-snug mb-2 text-[20px]">Influencer Unboxing Compilation</h4>
+<div class="flex items-center justify-between pt-3 mt-4 border-t border-white/5">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center">
+<span class="material-symbols-outlined text-[14px] mr-1" data-icon="movie_edit">movie_edit</span>
+                                    Final Cut
+                                </span>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-white/5 px-2 py-1 rounded">Due Tom.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Column: Posted -->
+<div class="w-[340px] flex-shrink-0 flex flex-col h-full">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center space-x-2">
+<div class="w-2 h-2 rounded-full bg-surface-variant border border-on-surface-variant"></div>
+<h3 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Posted</h3>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container py-1 px-2 rounded-md">12</span>
+</div>
+<div class="flex-1 overflow-y-auto kanban-scroll space-y-4 pr-2">
+<!-- Card 6 -->
+<div class="bg-surface-container-low/50 border border-white/5 rounded-xl p-5 opacity-60">
+<div class="flex justify-between items-start mb-3">
+<span class="font-label-sm text-label-sm uppercase tracking-wider px-2 py-1 rounded bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white flex items-center space-x-1 shadow-sm opacity-50">
+<span class="material-symbols-outlined text-[14px]" data-icon="photo_camera">photo_camera</span>
+<span>Instagram</span>
+</span>
+<span class="material-symbols-outlined text-secondary text-[18px]" data-icon="check_circle">check_circle</span>
+</div>
+<h4 class="font-headline-md text-headline-md text-on-surface-variant leading-snug mb-2 text-[20px] line-through decoration-white/20">New Arrival: Rose 31 Teaser</h4>
+<div class="flex items-center justify-between pt-3 border-t border-white/5 mt-4">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 12, 2023</span>
+<div class="flex items-center space-x-3 text-on-surface-variant">
+<span class="flex items-center text-[12px]"><span class="material-symbols-outlined text-[14px] mr-1" data-icon="favorite">favorite</span> 12.4k</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

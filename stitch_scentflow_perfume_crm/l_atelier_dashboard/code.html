@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>L'Atelier CRM - Dashboard</title>
+<!-- Google Fonts: Geist & Playfair Display -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&amp;family=Playfair+Display:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-surface-variant": "#c4c7c7",
+                    "on-primary-container": "#7e7d7d",
+                    "surface-dim": "#131313",
+                    "primary-fixed-dim": "#c8c6c5",
+                    "error": "#ffb4ab",
+                    "surface": "#131313",
+                    "on-primary-fixed-variant": "#474646",
+                    "inverse-on-surface": "#303030",
+                    "surface-container": "#1f2020",
+                    "inverse-surface": "#e4e2e1",
+                    "secondary-fixed-dim": "#e9c349",
+                    "background": "#131313",
+                    "tertiary-container": "#121211",
+                    "secondary-container": "#af8d11",
+                    "on-tertiary-fixed-variant": "#484745",
+                    "surface-container-high": "#2a2a2a",
+                    "on-tertiary-fixed": "#1c1b1a",
+                    "surface-variant": "#353535",
+                    "on-tertiary": "#31302f",
+                    "secondary-fixed": "#ffe088",
+                    "surface-tint": "#c8c6c5",
+                    "surface-container-highest": "#353535",
+                    "on-secondary-fixed-variant": "#574500",
+                    "primary-container": "#121212",
+                    "on-primary-fixed": "#1c1b1b",
+                    "on-tertiary-container": "#7f7d7b",
+                    "error-container": "#93000a",
+                    "on-primary": "#313030",
+                    "on-error": "#690005",
+                    "on-secondary": "#3c2f00",
+                    "on-error-container": "#ffdad6",
+                    "surface-container-low": "#1b1c1c",
+                    "primary": "#c8c6c5",
+                    "surface-container-lowest": "#0e0e0e",
+                    "inverse-primary": "#5f5e5e",
+                    "outline-variant": "#444748",
+                    "secondary": "#e9c349",
+                    "tertiary-fixed-dim": "#c9c6c3",
+                    "on-secondary-container": "#342800",
+                    "tertiary": "#c9c6c3",
+                    "primary-fixed": "#e5e2e1",
+                    "outline": "#8e9192",
+                    "on-background": "#e4e2e1",
+                    "on-secondary-fixed": "#241a00",
+                    "tertiary-fixed": "#e5e2df",
+                    "surface-bright": "#393939",
+                    "on-surface": "#e4e2e1"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "unit": "8px",
+                    "section-gap": "64px",
+                    "container-padding": "32px"
+            },
+            "fontFamily": {
+                    "body-lg": ["Geist"],
+                    "label-md": ["Geist"],
+                    "headline-lg": ["Playfair Display"],
+                    "display-lg": ["Playfair Display"],
+                    "label-sm": ["Geist"],
+                    "headline-md": ["Playfair Display"],
+                    "headline-lg-mobile": ["Playfair Display"],
+                    "body-md": ["Geist"]
+            },
+            "fontSize": {
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.08em", "fontWeight": "600"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "500"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          }
+        }
+      }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased selection:bg-secondary/30 selection:text-secondary">
+<!-- SideNavBar Component -->
+<nav class="bg-surface-container/70 dark:bg-surface-container/70 backdrop-blur-xl fixed left-0 top-0 h-full w-[280px] border-r border-white/5 shadow-2xl flex flex-col py-8 px-6 space-y-4 z-40 hidden md:flex">
+<!-- Header / Logo -->
+<div class="mb-section-gap px-4">
+<h1 class="font-headline-md text-headline-md tracking-tighter text-on-surface dark:text-on-surface">L'Atelier</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant tracking-widest uppercase mt-1">Perfume CRM</p>
+</div>
+<!-- Navigation Links -->
+<div class="flex flex-col space-y-2 flex-grow">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-secondary dark:text-secondary-fixed-dim font-bold border-r-2 border-secondary bg-white/5 transition-all duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined font-light">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Inactive Tabs -->
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined font-light">group</span>
+<span class="font-label-md text-label-md">Customers</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined font-light">shopping_cart</span>
+<span class="font-label-md text-label-md">Orders</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined font-light">inventory_2</span>
+<span class="font-label-md text-label-md">Products</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined font-light">calendar_month</span>
+<span class="font-label-md text-label-md">Content Planner</span>
+</a>
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined font-light">monitoring</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+</div>
+<!-- Footer / Settings -->
+<div class="mt-auto">
+<a class="flex items-center space-x-4 px-4 py-3 rounded-lg text-on-surface-variant dark:text-on-surface-variant opacity-70 hover:bg-white/5 hover:text-on-surface transition-all duration-300 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined font-light">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar Component -->
+<header class="bg-background/80 dark:bg-background/80 backdrop-blur-md fixed top-0 right-0 w-full md:w-[calc(100%-280px)] z-50 flex justify-between items-center h-20 px-gutter border-b border-white/5">
+<!-- Mobile Menu Toggle (Visible only on mobile) -->
+<button class="md:hidden text-on-surface-variant hover:text-secondary transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<!-- Search Bar -->
+<div class="flex items-center bg-surface-container-high border border-white/5 rounded-full px-4 py-2 focus-within:ring-1 focus-within:ring-secondary/20 transition-all w-64 md:w-96 hidden sm:flex">
+<span class="material-symbols-outlined text-on-surface-variant mr-3 text-sm">search</span>
+<input class="bg-transparent border-none outline-none text-on-surface font-label-md text-label-md w-full placeholder:text-on-surface-variant/50 focus:ring-0 p-0" placeholder="Search orders, customers..." type="text"/>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center space-x-6">
+<button class="text-on-surface-variant hover:text-secondary transition-colors relative">
+<span class="material-symbols-outlined font-light">history</span>
+</button>
+<button class="text-on-surface-variant hover:text-secondary transition-colors relative">
+<span class="material-symbols-outlined font-light">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-white/10 bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-on-surface-variant">person</span>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="md:ml-[280px] mt-20 p-container-padding min-h-screen">
+<!-- Page Header -->
+<div class="mb-section-gap flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+<div>
+<h2 class="font-display-lg text-display-lg text-on-surface">Overview</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">Your atelier's performance at a glance.</p>
+</div>
+<button class="flex items-center space-x-2 px-6 py-3 border border-secondary text-secondary rounded-DEFAULT hover:bg-secondary/10 transition-all font-label-md text-label-md">
+<span class="material-symbols-outlined text-sm">download</span>
+<span>Export Report</span>
+</button>
+</div>
+<!-- Metrics Bento Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-gutter mb-section-gap">
+<!-- Metric 1 -->
+<div class="bg-surface-container-high border border-white/5 rounded-xl p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Revenue Today</span>
+<span class="material-symbols-outlined text-secondary font-light">account_balance_wallet</span>
+</div>
+<div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">$1.2k</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-2 flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span> +14.2%
+                    </p>
+</div>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-container-high border border-white/5 rounded-xl p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Monthly Revenue</span>
+<span class="material-symbols-outlined text-on-surface-variant font-light">monitoring</span>
+</div>
+<div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">$45k</h3>
+<p class="font-label-sm text-label-sm text-secondary mt-2 flex items-center">
+<span class="material-symbols-outlined text-[16px] mr-1">trending_up</span> +8.4%
+                    </p>
+</div>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-container-high border border-white/5 rounded-xl p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Total Orders</span>
+<span class="material-symbols-outlined text-on-surface-variant font-light">shopping_bag</span>
+</div>
+<div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">154</h3>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-2 flex items-center">
+                        Current month
+                    </p>
+</div>
+</div>
+<!-- Metric 4 -->
+<div class="bg-surface-container-high border border-white/5 rounded-xl p-6 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-4">
+<span class="font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">Pending Orders</span>
+<span class="material-symbols-outlined text-on-surface-variant font-light">hourglass_empty</span>
+</div>
+<div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface">12</h3>
+<p class="font-label-sm text-label-sm text-error mt-2 flex items-center">
+                        Requires attention
+                    </p>
+</div>
+</div>
+</div>
+<!-- Complex Layout: Chart & Lists -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Chart Section (Spans 8 cols) -->
+<div class="lg:col-span-8 bg-surface-container-high border border-white/5 rounded-xl p-6 flex flex-col">
+<div class="flex justify-between items-center mb-8">
+<h3 class="font-headline-md text-headline-md text-on-surface">Revenue vs Profit</h3>
+<div class="flex space-x-4 font-label-sm text-label-sm">
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-full bg-secondary"></span>
+<span class="text-on-surface-variant uppercase tracking-widest">Revenue</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-3 h-3 rounded-full bg-white/20"></span>
+<span class="text-on-surface-variant uppercase tracking-widest">Profit</span>
+</div>
+</div>
+</div>
+<!-- Stylized CSS/SVG Chart Placeholder -->
+<div class="flex-grow relative h-64 w-full flex items-end">
+<!-- Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-10">
+<div class="w-full h-px bg-white"></div>
+<div class="w-full h-px bg-white"></div>
+<div class="w-full h-px bg-white"></div>
+<div class="w-full h-px bg-white"></div>
+<div class="w-full h-px bg-white"></div>
+</div>
+<!-- SVG Area Chart representation -->
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Profit Area (Subtle) -->
+<defs>
+<lineargradient id="profitGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="rgba(255,255,255,0.1)"></stop>
+<stop offset="100%" stop-color="rgba(255,255,255,0)"></stop>
+</lineargradient>
+<lineargradient id="revenueGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#e9c349" stop-opacity="0.3"></stop>
+<stop offset="100%" stop-color="#e9c349" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<path d="M0,80 Q10,70 20,75 T40,60 T60,65 T80,50 T100,55 L100,100 L0,100 Z" fill="url(#profitGrad)"></path>
+<path d="M0,80 Q10,70 20,75 T40,60 T60,65 T80,50 T100,55" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="1.5"></path>
+<!-- Revenue Area (Gold) -->
+<path d="M0,60 Q15,40 30,50 T60,30 T80,40 T100,20 L100,100 L0,100 Z" fill="url(#revenueGrad)"></path>
+<path d="M0,60 Q15,40 30,50 T60,30 T80,40 T100,20" fill="none" stroke="#e9c349" stroke-width="2"></path>
+</svg>
+<!-- X Axis Labels -->
+<div class="absolute -bottom-6 left-0 right-0 flex justify-between font-label-sm text-label-sm text-on-surface-variant opacity-50">
+<span>1 Nov</span>
+<span>15 Nov</span>
+<span>30 Nov</span>
+</div>
+</div>
+</div>
+<!-- Sidebar Lists (Spans 4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-gutter">
+<!-- Best Sellers -->
+<div class="bg-surface-container-high border border-white/5 rounded-xl p-6">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Best Sellers</h3>
+<div class="space-y-4">
+<!-- Item 1 -->
+<div class="flex items-center space-x-4">
+<div class="w-12 h-16 bg-surface-container-lowest rounded overflow-hidden relative">
+<img class="w-full h-full object-cover mix-blend-luminosity opacity-80" data-alt="A high-end product photography shot of a sleek, minimalist perfume bottle named Santal Enigma. The bottle is made of heavy, polished glass with a matte black magnetic cap, resting on a slab of dark slate. The lighting is low-key and dramatic, casting a soft, golden ambient glow from the side to highlight the amber liquid inside. The overall aesthetic is moody, luxurious, and aligns with modern luxury editorial design, utilizing deep charcoal tones and stark contrasts." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXUkQ5EMA1ekWG7yTR8pcchM9axnV7nQOzW7yh1SLIWEARbOIzdpTECY84aJR5pAcUzMLr9CmSkdm1Zmt5nFV5av7a4qRS59K_MbFCsKrYXL3--RZNYMST5MG2N2-etefjS1OelEVojTsbbEYRXUeg4OgiV0RbOzzY3n8KKPmBAIdG4dZHeboGE18CSoamYv-w58L1LFYjzTXHw69kLVhneBLZkj6Vri3ZztjaZGJOCNigu6iy-WC_MxwXvb3A4BorusG32KyZAq00"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-md text-label-md text-on-surface">Santal Enigma</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Eau de Parfum</p>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-secondary">42</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Sales</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center space-x-4">
+<div class="w-12 h-16 bg-surface-container-lowest rounded overflow-hidden relative">
+<img class="w-full h-full object-cover mix-blend-luminosity opacity-80" data-alt="A sophisticated editorial image of a luxury perfume bottle named Rose Nocturne. The design features a heavy, fluted glass bottle with a brushed gold atomizer, positioned against a seamless dark maroon background that fades into pure black. Subtle, rim lighting catches the edge of the glass, creating a sense of volume and premium quality. The scene is devoid of distractions, focusing entirely on the elegant silhouette of the fragrance in a dark mode, minimalist setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCtreZWg7AJrie2jxfgT4_Ocvnvp1fnzrD-XSW8RUrj0qjHu2voeqCaEil9QPr2XWFDuXNyat3BriVf7RYpSdPkNI545XtMuvmtguRReS30eanPcmMmoG_903sVXGIo9MvPpbbsVBX7d9HvjZpvbuyIz3DSfCE0FLYXLbsDRVQgCnbLGfCrHapSfrn6w8F4DCaACnlL24tBP3W7UOV5BWDBVzsKRUGoDwYFIG3-CNYD8uJl7AuFb7kt96n6jxjNDZZu2QIiru7L6Pqf"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-md text-label-md text-on-surface">Rose Nocturne</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Extrait</p>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-secondary">38</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Sales</p>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center space-x-4">
+<div class="w-12 h-16 bg-surface-container-lowest rounded overflow-hidden relative">
+<img class="w-full h-full object-cover mix-blend-luminosity opacity-80" data-alt="A striking minimalist still life of a dark, geometric perfume bottle named Oud Horizon. The bottle is completely opaque and matte black, featuring a perfectly spherical gold cap, standing on a reflective black acrylic surface. Sharp, directional studio lighting creates a dramatic shadow extending diagonally across the frame. The composition is highly structured and asymmetric, reflecting a modern SaaS dashboard's need for clean, high-contrast visual anchors within a luxury aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDMmfmD0TTZQTeDu7lMy_25Q2A2QuDbahUgbipZt4d83McZmDa-vTyZPSq0oPYesVxxvOm3B3qlOHw485setwrdurVUKeiF9qDdye2TpqKsrhD4lAyZXQ94jeGAU4WWAH11AnqbBvDsACkqjmlb-k3MohA46_w19tOo2cqmMYz7EqHXa_k8URwdeWdaSIWdCS1c086-W78tKXJj1SvwmoQNQIh1P7F09h4euTHM2OshiizQUvcK9NjESES_BwkVU8okYFiIRXHJNR-x"/>
+</div>
+<div class="flex-grow">
+<h4 class="font-label-md text-label-md text-on-surface">Oud Horizon</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Eau de Parfum</p>
+</div>
+<div class="text-right">
+<span class="font-headline-md text-headline-md text-secondary">24</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-1">Sales</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Orders Section -->
+<div class="mt-gutter bg-surface-container-high border border-white/5 rounded-xl overflow-hidden">
+<div class="p-6 border-b border-white/5 flex justify-between items-center">
+<h3 class="font-headline-md text-headline-md text-on-surface">Recent Orders</h3>
+<a class="font-label-sm text-label-sm text-secondary hover:underline uppercase tracking-widest" href="#">View All</a>
+</div>
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-white/5 border-b border-white/10">
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal">Customer</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal">Fragrance</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal">Date</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal text-right">Amount</th>
+<th class="py-4 px-6 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest font-normal text-right">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-md text-body-md text-on-surface divide-y divide-white/5">
+<tr class="hover:bg-white/[0.02] transition-colors group">
+<td class="py-4 px-6">Eleanor Vance</td>
+<td class="py-4 px-6 text-on-surface-variant">Santal Enigma</td>
+<td class="py-4 px-6 text-on-surface-variant">Today, 10:42 AM</td>
+<td class="py-4 px-6 text-right font-label-md text-label-md">$240.00</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-block px-2 py-1 bg-secondary/10 text-secondary font-label-sm text-label-sm rounded uppercase tracking-wider">Processed</span>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors group">
+<td class="py-4 px-6">Julian Blackwood</td>
+<td class="py-4 px-6 text-on-surface-variant">Rose Nocturne</td>
+<td class="py-4 px-6 text-on-surface-variant">Today, 09:15 AM</td>
+<td class="py-4 px-6 text-right font-label-md text-label-md">$310.00</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-block px-2 py-1 bg-white/10 text-on-surface-variant font-label-sm text-label-sm rounded uppercase tracking-wider">Pending</span>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors group">
+<td class="py-4 px-6">Sophia Sterling</td>
+<td class="py-4 px-6 text-on-surface-variant">Oud Horizon</td>
+<td class="py-4 px-6 text-on-surface-variant">Yesterday</td>
+<td class="py-4 px-6 text-right font-label-md text-label-md">$285.00</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-block px-2 py-1 bg-secondary/10 text-secondary font-label-sm text-label-sm rounded uppercase tracking-wider">Processed</span>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors group">
+<td class="py-4 px-6">Marcus Thorne</td>
+<td class="py-4 px-6 text-on-surface-variant">Bergamot Veil</td>
+<td class="py-4 px-6 text-on-surface-variant">Yesterday</td>
+<td class="py-4 px-6 text-right font-label-md text-label-md">$190.00</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-block px-2 py-1 bg-secondary/10 text-secondary font-label-sm text-label-sm rounded uppercase tracking-wider">Processed</span>
+</td>
+</tr>
+<tr class="hover:bg-white/[0.02] transition-colors group">
+<td class="py-4 px-6">Isabella Rossi</td>
+<td class="py-4 px-6 text-on-surface-variant">Santal Enigma</td>
+<td class="py-4 px-6 text-on-surface-variant">Oct 28, 2023</td>
+<td class="py-4 px-6 text-right font-label-md text-label-md">$240.00</td>
+<td class="py-4 px-6 text-right">
+<span class="inline-block px-2 py-1 bg-secondary/10 text-secondary font-label-sm text-label-sm rounded uppercase tracking-wider">Processed</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+</body></html>

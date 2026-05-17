@@ -1,26 +1,113 @@
 @import "tailwindcss";
+@plugin "tailwindcss-animate";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #131313;
+  --foreground: #e4e2e1;
+
+  --card: #1f2020;
+  --card-foreground: #e4e2e1;
+
+  --popover: rgba(42, 42, 42, 0.9);
+  --popover-foreground: #e4e2e1;
+
+  --primary: #e9c349;
+  --primary-foreground: #3c2f00;
+
+  --secondary: #2a2a2a;
+  --secondary-foreground: #e4e2e1;
+
+  --muted: #1b1c1c;
+  --muted-foreground: #c4c7c7;
+
+  --accent: rgba(233, 195, 73, 0.12);
+  --accent-foreground: #e4e2e1;
+
+  --destructive: #ffb4ab;
+  --destructive-foreground: #690005;
+
+  --border: rgba(255, 255, 255, 0.08);
+  --input: rgba(255, 255, 255, 0.10);
+  --ring: rgba(233, 195, 73, 0.5);
+
+  --radius: 0.5rem;
+}
+
+.light {
+  --background: #f7f3f0;
+  --foreground: #131313;
+
+  --card: #ffffff;
+  --card-foreground: #131313;
+
+  --popover: #ffffff;
+  --popover-foreground: #131313;
+
+  --primary: #af8d11;
+  --primary-foreground: #342800;
+
+  --secondary: #efefef;
+  --secondary-foreground: #131313;
+
+  --muted: #f3f3f3;
+  --muted-foreground: #5f5e5e;
+
+  --accent: rgba(175, 141, 17, 0.10);
+  --accent-foreground: #131313;
+
+  --destructive: #93000a;
+  --destructive-foreground: #ffdad6;
+
+  --border: rgba(0, 0, 0, 0.10);
+  --input: rgba(0, 0, 0, 0.12);
+  --ring: rgba(175, 141, 17, 0.4);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-playfair);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  body {
+    @apply bg-background text-foreground;
+    background-image: radial-gradient(
+        1200px 600px at 20% -10%,
+        rgba(233, 195, 73, 0.08),
+        transparent 60%
+      ),
+      radial-gradient(
+        900px 500px at 80% 0%,
+        rgba(255, 255, 255, 0.04),
+        transparent 55%
+      );
+  }
 }
